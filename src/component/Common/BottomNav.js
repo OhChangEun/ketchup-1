@@ -1,10 +1,7 @@
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { useState } from "react";
-import { MdHome } from "react-icons/md";
-import { MdSearch } from "react-icons/md";
-import { MdCameraAlt } from "react-icons/md";
-import { MdWidgets } from "react-icons/md";
-import { MdPerson } from "react-icons/md";
+import { Link } from "react-router-dom"; // Link 추가
+import { MdHome, MdSearch, MdCameraAlt, MdWidgets, MdPerson } from "react-icons/md";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -30,14 +27,19 @@ const BottomNav = () => {
           label="Main"
           value="main"
           icon={<MdHome size={40} />}
+          component={Link} // Link로 변경
+          to="/" // 링크의 목적지 설정
         />
         <BottomNavigationAction
           label="Search"
           value="search"
           icon={<MdSearch size={40} />}
+          component={Link} // Link로 변경
+          to="/search" // 링크의 목적지 설정
         />
         <BottomNavigationAction
           label="Camera"
+          value="camera"
           icon={<MdCameraAlt size={40} />}
         />
         <BottomNavigationAction
