@@ -2,7 +2,7 @@ import Slider from "react-slick";
 import "../style/slick.css";
 import "../style/slick-theme.css";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react"; // useRef 추가
 import RestaruantList from "./RestaruantList";
 
 const Wrapper = styled.div`
@@ -47,9 +47,9 @@ function PrevArrow(props) {
     />
   );
 }
-
 function TypeSlider() {
-  const [category, setCategory] = useState("전체"); //카테고리 상태
+  const [category, setCategory] = useState("전체");
+  const sliderRef = useRef(null); // useRef 추가
 
   const settings = {
     className: "center",
@@ -58,40 +58,28 @@ function TypeSlider() {
     infinite: true,
     centerPadding: "60px",
     slidesToShow: 2,
-    slidesToScroll: 2,
+    slidesToScroll: 2, // 한번에 스크롤되는 슬라이드의 수를 지정하는 속성 
     speed: 500,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    afterChange: (current) => {
+      // 변경: 슬라이드가 변경될 때 실행되는 콜백 추가
+      const categoryList = ["전체", "한식", "일식", "중식", "양식", "디저트"];
+      setCategory(categoryList[current]); // 현재 슬라이드의 카테고리 선택
+    },
   };
 
-  //카테고리별로 조건부 렌더링
-  const List = () => {
-    switch (category) {
-      case "한식":
-        return <RestaruantList type="한식" />;
-      case "일식":
-        return <RestaruantList type="일식" />;
-      case "중식":
-        return <RestaruantList type="중식" />;
-      case "양식":
-        return <RestaruantList type="양식" />;
-      case "디저트":
-        return <RestaruantList type="디저트/베이커리" />;
-      default:
-        return <RestaruantList />;
-    }
-  };
-
-  //카테고리 선택 함수
   const onCategory = (category) => {
     setCategory(category);
+    const index = ["전체", "한식", "일식", "중식", "양식", "디저트"].indexOf(category);
+    sliderRef.current.slickGoTo(index); // 해당 카테고리가 중앙에 오도록 슬라이드 이동
   };
 
   return (
     <Wrapper>
       <Title>카테고리</Title>
       <div className="slider-container">
-        <Slider {...settings}>
+        <Slider ref={sliderRef} {...settings}> {/* sliderRef 추가 */}
           <div onClick={() => onCategory("전체")}>
             <Category className={category === "전체" ? "active" : ""}>
               전체
@@ -124,7 +112,9 @@ function TypeSlider() {
           </div>
         </Slider>
       </div>
-      <div>{List()}</div>
+      <div>
+        {category && <RestaruantList key={category} type={category} />}
+      </div>
     </Wrapper>
   );
 }

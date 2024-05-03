@@ -35,7 +35,7 @@ const BottomNav = () => {
           value="search"
           icon={<MdSearch size={40} />}
           component={Link} // Link로 변경
-          to="/search" // 링크의 목적지 설정
+          to="/kakaoMap" // 링크의 목적지 설정
         />
         <BottomNavigationAction
           label="Camera"

@@ -10,10 +10,10 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
 `;
 
-function RestaurantList() {
+function RestaurantList({ type }) {
   const [restaurants, setRestaurants] = useState([]);
   const positionRef = useRef(null); // useRef를 사용하여 위치 정보 저장
-
+  //console.log(type); // 카테고리 출력
   useEffect(() => {
     // 브라우저가 geolocation을 지원하는지 확인
     if (navigator.geolocation) {
@@ -30,6 +30,8 @@ function RestaurantList() {
           ps.categorySearch('FD6', placesSearchCB, {
             location: new kakao.maps.LatLng(lat, lng), // 현재 위치 설정
             radius: 3000, // 검색 반경 (미터 단위)
+            //size: 15, // 한 페이지에 보여질 목록 개수
+            //page: 45, // 검색할 페이지
           });
         },
         // 위치 정보를 가져오는데 실패한 경우
@@ -46,7 +48,8 @@ function RestaurantList() {
       if (status === kakao.maps.services.Status.OK) {
         const sorted = getResInfo(data);
         setRestaurants(sorted);
-        console.log(restaurants);
+        //console.log(sorted);
+        //console.log(sorted.category_name);
         //setRestaurants(data);
       } else {
         console.error('검색에 실패했습니다.');
@@ -58,40 +61,44 @@ function RestaurantList() {
 
       // 검색된 장소마다 거리를 계산하고 배열에 추가
       for (var i = 0; i < places.length; i++) {
-        var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
-        //var distance = calculateDistance(placePosition, positionRef);
+        //var distance = calculateDistance(placePosition, positionRef);      
+        //console.log(type);
+        if (type === "전체"){ // 모든 요소 출력
+          distancesWithPlaces.push({
+            index: i,
+            distance: places[i].distance,
+            place: places[i], // 장소 객체 자체를 저장
+          });// 장소의 위치를 저장         
+        } 
+        else if (places[i].category_name.includes(type)) {
+          distancesWithPlaces.push({
+            index: i,
+            distance: places[i].distance,
+            place: places[i], // 장소 객체 자체를 저장
+          });// 장소의 위치를 저장
+        }
+        /*
+        typeof type === 'undefined' || 
+        //console.log(type);
+        if(places[i].category_name.includes(type)){
+          distancesWithPlaces.push({
+            index: i,
+            distance: places[i].distance,
+            place: places[i], // 장소 객체 자체를 저장
+            placePosition: placePosition // 장소의 위치를 저장
+          });
+        }
+        */
+        //console.log(places[i].category_name);
 
-        distancesWithPlaces.push({
-          index: i,
-          distance: places[i].distance,
-          place: places[i], // 장소 객체 자체를 저장
-          placePosition: placePosition // 장소의 위치를 저장
-        });
       }
-      
+
       // 거리를 기준으로 정렬
       distancesWithPlaces.sort(function (a, b) {
         return a.distance - b.distance;
       });
       // console.log(distancesWithPlaces);
       return distancesWithPlaces;
-    }
-    // 마커와 현재 위치 간의 거리를 계산하는 함수
-    function calculateDistance(markerPosition, userPosition) {
-      const lat1 = markerPosition.getLat();
-      const lon1 = markerPosition.getLng();
-      const lat2 = userPosition.current.coords.latitude; 
-      const lon2 = userPosition.current.coords.longitude;
-
-      // 위도와 경도 차이
-      const latDiff = Math.abs(lat2 - lat1);
-      const lonDiff = Math.abs(lon2 - lon1);
-
-      // 대략적인 거리를 계산 (단위: km)
-      const approximateDistance = Math.sqrt(latDiff * latDiff + lonDiff * lonDiff) * 111.32;
-
-      // m로 변환
-      return approximateDistance * 1000;
     }
   }, []);
 

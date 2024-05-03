@@ -32,7 +32,7 @@ const Container = styled.div`
     align-items: center;
 
     .star {
-      margin-top: 1.0em; /* 아이콘과 텍스트 사이의 간격 조정 */
+      margin-top: 2.0em; /* 아이콘과 텍스트 사이의 간격 조정 */
       margin-bottom: 0.8em; /* 아이콘과 텍스트 사이의 간격 조정 */
       display: flex;
       align-items: center;
@@ -94,7 +94,7 @@ function RestaruantItem({ restaurant }) {
         <p className="name">{place_name.length > 8 ? `${place_name.slice(0, 7)}...` : place_name}</p>
         <div className="box">
           <p className="star">
-            <FaStar color="yellow" style={{ fontSize: "2em" }} />
+            <FaStar color="yellow" style={{ fontSize: "1.5em" }} />
             {star}
           </p>
           <div className="review">리뷰:{review}</div>

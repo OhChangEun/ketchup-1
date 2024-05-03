@@ -56,7 +56,9 @@ export default function KakaoMap() {
 
                 ps.categorySearch('FD6', placesSearchCB, {
                     location: new kakao.maps.LatLng(lat, lng),
-                    radius: 3000
+                    radius: 3000,
+                    size: 15, // 한 페이지에 보여질 목록 개수를 45개로 설정
+                    page: 3, // 검색할 페이지
                 });
 
                 // 마커가 지도 위에 표시되도록 설정합니다
