@@ -29,7 +29,7 @@ function RestaurantList({ type }) {
           // 내 위치 기반으로 3km 이내의 은행 검색
           ps.categorySearch('FD6', placesSearchCB, {
             location: new kakao.maps.LatLng(lat, lng), // 현재 위치 설정
-            radius: 3000, // 검색 반경 (미터 단위)
+            radius: 5000, // 검색 반경 (미터 단위)
             //size: 15, // 한 페이지에 보여질 목록 개수
             //page: 45, // 검색할 페이지
           });
@@ -70,7 +70,7 @@ function RestaurantList({ type }) {
             place: places[i], // 장소 객체 자체를 저장
           });// 장소의 위치를 저장         
         } 
-        else if (places[i].category_name.includes(type)) {
+        else if (places[i].category_name.includes(type)) { // 한식, 양식, 중식, 디저트 출력
           distancesWithPlaces.push({
             index: i,
             distance: places[i].distance,

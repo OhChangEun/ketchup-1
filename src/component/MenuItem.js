@@ -85,7 +85,7 @@ const MenuItem = () => {
                   <h2 className="Name">{item.FoodName}</h2>
                   <p className="description">{item.FoodProfile}</p>
                   <Link
-                    to={`/menulist/${id}/${item.Food_id}`}
+                    to={`/main/menulist/${id}/${item.Food_id}`}
                     key={item.Food_id}
                   >
                     <div className="search">

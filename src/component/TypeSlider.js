@@ -58,7 +58,7 @@ function TypeSlider() {
     infinite: true,
     centerPadding: "60px",
     slidesToShow: 2,
-    slidesToScroll: 2, // 한번에 스크롤되는 슬라이드의 수를 지정하는 속성 
+    slidesToScroll: 1, // 한번에 스크롤되는 슬라이드의 수를 지정하는 속성 
     speed: 500,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
@@ -71,7 +71,12 @@ function TypeSlider() {
 
   const onCategory = (category) => {
     setCategory(category);
-    const index = ["전체", "한식", "일식", "중식", "양식", "디저트"].indexOf(category);
+    let index;
+    if (category === "전체") {
+      index = 0; // 전체 카테고리 선택 시 첫 번째 슬라이드로 이동
+    } else {
+      index = ["한식", "일식", "중식", "양식", "디저트"].indexOf(category) + 1; // 선택한 카테고리의 인덱스 + 1 (첫 번째는 전체이므로)
+    }
     sliderRef.current.slickGoTo(index); // 해당 카테고리가 중앙에 오도록 슬라이드 이동
   };
 

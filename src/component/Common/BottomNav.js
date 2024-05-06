@@ -28,7 +28,7 @@ const BottomNav = () => {
           value="main"
           icon={<MdHome size={40} />}
           component={Link} // Link로 변경
-          to="/" // 링크의 목적지 설정
+          to="/main" // 링크의 목적지 설정
         />
         <BottomNavigationAction
           label="Search"

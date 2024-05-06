@@ -87,7 +87,7 @@ function RestaruantItem({ restaurant }) {
 
   return (
     <StyledLink
-      to={`/menulist/${id}?name=${place_name}&star=${star}&location=${distance}&img=${img}&food=${food}`}
+      to={`/main/menulist/${id}?name=${place_name}&star=${star}&location=${distance}&img=${img}&food=${food}`}
     >
       <Container>
         <img src={img || "http://via.placeholder.com/160"} alt={place_name} />
