@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 50px;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.08);
 `;
 
@@ -35,7 +35,7 @@ const BottomNav = () => {
           value="search"
           icon={<MdSearch size={40} />}
           component={Link} // Link로 변경
-          to="/kakaoMap" // 링크의 목적지 설정
+          to="/googleMap" // 링크의 목적지 설정
         />
         <BottomNavigationAction
           label="Camera"

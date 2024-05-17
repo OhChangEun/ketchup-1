@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import KakaoMap from "./pages/KakaoMap";
 import { auth } from "./firebase";
 import BottomNav from "./component/Common/BottomNav";
+import GoogleMap from "./pages/GoogleMap";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -41,6 +42,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             {/* BottomNav가 포함된 페이지 */}
             <Route path="/main" element={<Main />} />
+            <Route path="/googleMap" element={<GoogleMap />} />
             <Route path="/kakaoMap" element={<KakaoMap />} />
             <Route path="/menulist/:id" element={<MenuList />} />
             <Route path="/menulist/:id/:Food_id" element={<MenuDetail />} />

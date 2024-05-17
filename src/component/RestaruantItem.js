@@ -2,22 +2,25 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FaStar } from "react-icons/fa";
 
-// 링크 스타일 컴포넌트 정의
+// 스타일드 컴포넌트 정의
 const StyledLink = styled(Link)`
-  text-decoration: none; /* 링크에 대한 밑줄 제거 */
+  text-decoration: none;
 `;
 
+// 스타일드 컴포넌트 정의
 const Container = styled.div`
   box-sizing: content-box;
   border-radius: 30px;
   place-items: center;
   border: 1px solid #dee2e6;
+  width: 160px;
+
 
   & img {
     border-radius: 30px;
-    object-fit: cover; /* 수정된 부분 */
-    width: 100%; /* 추가된 부분 */
-    height: 100%; /* 추가된 부분 */
+    object-fit: cover;
+    width: 160px;
+    height: 160px;
   }
 
   .name {
@@ -32,8 +35,8 @@ const Container = styled.div`
     align-items: center;
 
     .star {
-      margin-top: 2.0em; /* 아이콘과 텍스트 사이의 간격 조정 */
-      margin-bottom: 0.8em; /* 아이콘과 텍스트 사이의 간격 조정 */
+      margin-top: 2.0em;
+      margin-bottom: 0.8em;
       display: flex;
       align-items: center;
     }
@@ -42,69 +45,61 @@ const Container = styled.div`
     .phone,
     .review {
       text-align: center;
-      font-size: 0.8em; /* 더 작은 글자 크기 */
+      font-size: 0.8em;
     }
 
     .dist {
-      color: black; /* 검정색으로 변경 */
+      color: black;
     }
 
     .phone {
-      color: #444; /* 조금 진한 회색 */
-    }
-
-    .review {
+      color: #444;
     }
   }
 
-  //컴포넌트간 간격
   & {
     border-top: 1px solid #dee2e6;
     margin: 2vh;
   }
 `;
 
-function RestaruantItem({ restaurant }) {
-  // item에서 필요한 정보 추출
-  const { place } = restaurant;
+// 레스토랑 항목을 나타내는 함수형 컴포넌트
+function RestaurantItem({ restaurant, distance }) {
+  // props로 전달된 레스토랑 정보를 추출
   const {
-    //address_name = null,
-    //category_group_code = null,
-    //category_group_name,
-    //category_name,
     id,
-    phone,
-    place_name,
-    distance,
-    //place_url,
-    //road_address_name
-  } = place;
+    name,
+    rating,
+    user_ratings_total,
+    vicinity,
+    geometry,
+    photos,
+  } = restaurant;
 
-  const star = null;
-  const review = null;
-  const img = null;
-  const food = null;
+  // 레스토랑의 위치 정보 추출
+  const { location } = geometry;
 
   return (
     <StyledLink
-      to={`/main/menulist/${id}?name=${place_name}&star=${star}&location=${distance}&img=${img}&food=${food}`}
+      to={`/main/menulist/${id}?name=${name}&rating=${rating}&total_ratings=${user_ratings_total}&address=${vicinity}`}
     >
       <Container>
-        <img src={img || "http://via.placeholder.com/160"} alt={place_name} />
-        <p className="name">{place_name.length > 8 ? `${place_name.slice(0, 7)}...` : place_name}</p>
+        <img src={photos ? photos[0].getUrl() : "http://via.placeholder.com/160"} alt={name} />
+        <p className="name">{name.length > 8 ? `${name.slice(0, 7)}...` : name}</p>
         <div className="box">
           <p className="star">
             <FaStar color="yellow" style={{ fontSize: "1.5em" }} />
-            {star}
+            {rating}
           </p>
-          <div className="review">리뷰:{review}</div>
-          <div className="dist">거리:{distance}m</div>
-          <div className="phone">번호:{phone}</div>
-          <div></div>
+          <div className="review">리뷰: {user_ratings_total}</div>
+          <div className="dist">주소: {vicinity}</div>
+          <div className="dist">
+            거리: {distance >= 1000 ? (distance / 1000).toFixed(1) + "km" : distance.toFixed(1) + "m"}
+          </div>
         </div>
       </Container>
     </StyledLink>
   );
 }
 
-export default RestaruantItem;
+export default RestaurantItem;

@@ -26,6 +26,7 @@ const Category = styled.h4`
     font-weight: bold;
   }
 `;
+
 function NextArrow(props) {
   const { className, style, onClick } = props;
   return (
@@ -47,8 +48,9 @@ function PrevArrow(props) {
     />
   );
 }
+
 function TypeSlider() {
-  const [category, setCategory] = useState("전체");
+  const [category, setCategory] = useState("All");
   const sliderRef = useRef(null); // useRef 추가
 
   const settings = {
@@ -64,7 +66,7 @@ function TypeSlider() {
     prevArrow: <PrevArrow />,
     afterChange: (current) => {
       // 변경: 슬라이드가 변경될 때 실행되는 콜백 추가
-      const categoryList = ["전체", "한식", "일식", "중식", "양식", "디저트"];
+      const categoryList = ["All", "Korean", "Japanese", "Chinese", "Western", "Dessert"];
       setCategory(categoryList[current]); // 현재 슬라이드의 카테고리 선택
     },
   };
@@ -72,47 +74,48 @@ function TypeSlider() {
   const onCategory = (category) => {
     setCategory(category);
     let index;
-    if (category === "전체") {
+    if (category === "All") {
       index = 0; // 전체 카테고리 선택 시 첫 번째 슬라이드로 이동
-    } else {
-      index = ["한식", "일식", "중식", "양식", "디저트"].indexOf(category) + 1; // 선택한 카테고리의 인덱스 + 1 (첫 번째는 전체이므로)
+    } 
+    else {
+      index = ["Korean", "Japanese", "Chinese", "Western", "Dessert"].indexOf(category); // 선택한 카테고리의 인덱스 + 1 (첫 번째는 전체이므로)
     }
     sliderRef.current.slickGoTo(index); // 해당 카테고리가 중앙에 오도록 슬라이드 이동
   };
 
   return (
     <Wrapper>
-      <Title>카테고리</Title>
+      <Title>Category</Title>
       <div className="slider-container">
         <Slider ref={sliderRef} {...settings}> {/* sliderRef 추가 */}
-          <div onClick={() => onCategory("전체")}>
-            <Category className={category === "전체" ? "active" : ""}>
-              전체
+          <div onClick={() => onCategory("All")}>
+            <Category className={category === "All" ? "active" : ""}>
+              All
             </Category>
           </div>
-          <div onClick={() => onCategory("한식")}>
-            <Category className={category === "한식" ? "active" : ""}>
-              한식
+          <div onClick={() => onCategory("Korean")}>
+            <Category className={category === "Korean" ? "active" : ""}>
+              Korean
             </Category>
           </div>
-          <div onClick={() => onCategory("일식")}>
-            <Category className={category === "일식" ? "active" : ""}>
-              일식
+          <div onClick={() => onCategory("Japanese")}>
+            <Category className={category === "Japanese" ? "active" : ""}>
+              Japanese
             </Category>
           </div>
-          <div onClick={() => onCategory("중식")}>
-            <Category className={category === "중식" ? "active" : ""}>
-              중식
+          <div onClick={() => onCategory("Chinese")}>
+            <Category className={category === "Chinese" ? "active" : ""}>
+              Chinese
             </Category>
           </div>
-          <div onClick={() => onCategory("양식")}>
-            <Category className={category === "양식" ? "active" : ""}>
-              양식
+          <div onClick={() => onCategory("Western")}>
+            <Category className={category === "Western" ? "active" : ""}>
+              Western
             </Category>
           </div>
-          <div onClick={() => onCategory("디저트")}>
-            <Category className={category === "디저트" ? "active" : ""}>
-              디저트
+          <div onClick={() => onCategory("Dessert")}>
+            <Category className={category === "Dessert" ? "active" : ""}>
+              Dessert
             </Category>
           </div>
         </Slider>

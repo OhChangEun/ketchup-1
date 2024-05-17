@@ -6,6 +6,7 @@ const Wrapper = styled.div`
   font-size: 4vw;
   font-weight: bold;
 `;
+const { kakao } = window;
 
 const GetUserLocation = () => {
   const [address, setAddress] = useState("");
@@ -15,19 +16,11 @@ const GetUserLocation = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
+          const geocoder = new kakao.maps.services.Geocoder();
 
-          // Google Maps Geocoder 객체 생성
-          const geocoder = new window.google.maps.Geocoder();
-
-          // 좌표를 주소로 변환
-          const latLng = new window.google.maps.LatLng(latitude, longitude);
-          geocoder.geocode({ location: latLng }, (results, status) => {
-            if (status === window.google.maps.GeocoderStatus.OK) {
-              if (results[0]) {
-                setAddress(results[0].formatted_address);
-              }
-            } else {
-              console.log("Geocoder failed due to: " + status);
+          geocoder.coord2Address(longitude, latitude, (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              setAddress(result[0].address.address_name);
             }
           });
         },
