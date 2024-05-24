@@ -39,13 +39,15 @@ const BottomNav = () => {
         <BottomNavigationAction
           label="Camera"
           value="camera"
-          component={Link} // Link로 변경
-          to="/TTS" // 링크의 목적지 설정
           icon={<MdCameraAlt size={40} />}
+          component={Link} // Link로 변경
+          to="/main/picture"
         />
         <BottomNavigationAction
           label="Tema"
           value="tema"
+          component={Link}
+          to="/photo" // 링크의 목적지 설정
           icon={<MdWidgets size={40} />}
         />
         <BottomNavigationAction

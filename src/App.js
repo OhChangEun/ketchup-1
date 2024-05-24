@@ -13,6 +13,9 @@ import GoogleMap from "./pages/GoogleMap";
 import TestTTS from "./pages/TestTTS";
 import ResInfo from "./component/ResInfo";
 import { MenuList } from "@mui/material";
+import PhotoField from "./component/PhotoField";
+import MenuCapture from "./pages/MenuCapture";
+import MenuRestructure from "./pages/MenuRestructure";
 
 function App() {
   const { place_id } = useParams();
@@ -49,6 +52,12 @@ function App() {
             <Route path="/kakaoMap" element={<KakaoMap />} />
             <Route path="/main/menulist/:place_id" element={<MenuList />} />
             <Route path="/menulist/:id/:Food_id" element={<MenuDetail />} />
+            <Route path="/photo" element={<PhotoField />} />
+            <Route path="/main/picture" element={<MenuCapture />} />
+            <Route
+                path="/main/picture/restructure"
+                element={<MenuRestructure />}
+              />
             <Route path="/TTS" element={<TestTTS />} />
           </Routes>
           <ResInfo />
