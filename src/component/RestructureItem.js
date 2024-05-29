@@ -1,53 +1,90 @@
 //메뉴판 재구성 아이템
 import { Link } from "react-router-dom";
-import { FaSearchPlus } from "react-icons/fa";
 import styled from "styled-components";
+import { useState } from "react";
+import { MdAdd, MdRemove } from "react-icons/md";
 
 const Box = styled.div`
-  position: relative;
-  width: 90vw;
-  border-top: 1px solid #dee2e6;
-  margin-top: 5vh;
-  padding-top: 2vh;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  padding: 20px;
+  max-width: 300px;
+  transition: transform 0.2s;
+  
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const ImageWrapper = styled.div`
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  display: flex;
+  border-radius: 10px;
 `;
 
 const Image = styled.img`
-  margin: 2vh;
-  border-radius: 5vw;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 
-const Container = styled.div`
+const NameWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  margin-left: 3vw;
+  align-items: center;
+  justify-content: center; /* 수평 중앙 정렬을 위해 추가 */
+  text-align: center; /* 텍스트를 가운데 정렬하기 위해 추가 */
 `;
 
 const Name = styled.h2`
-  margin-top: 3vh;
-  margin-left: 20vw;
-  font-size: 4vw;
+  font-size: 1.5rem;
+  color: #333;
+  justify-content: center; /* 수평 중앙 정렬을 위해 추가 */
+`;
+
+const CollapsibleDescription = styled.div`
+  max-height: ${({ isOpen }) => (isOpen ? '1000px' : '100px')};
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+
 `;
 
 const Description = styled.p`
-  margin-left: 7vw;
-  font-size: 4vw;
+  font-size: 1rem;
   color: #6d6b6b;
-  text-align: left;
+  margin: 0; /* 위아래 마진 제거 */
+  line-height: 1.5; /* 수직 중앙 정렬을 위한 라인 높이 조정 */
 `;
 
-const Icon = styled(FaSearchPlus)`
-  font-size: 6vw;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 1vh;
-  &:hover {
-    color: #c35050;
-  }
+const ToggleButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #c35050;
+  font-size: 2rem;
+  padding: 10px 0; /* 위아래로 각각 10px의 여백 */
 `;
- 
+
+const Icon = styled.span`
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 2rem;
+  color: #c35050; // 아이콘의 색상
+
+`;
+
+const MinusIcon = styled(MdRemove)``;
+const PlusIcon = styled(MdAdd)``;
+
 const RestructureItem = ({ food }) => {
   const {
     id = 1,
@@ -69,27 +106,43 @@ const RestructureItem = ({ food }) => {
 
   console.log(food);
 
-  // 유효한 이미지 URL을 나타내는 문자열인지 확인
-  const renderImage = typeof base64Image === "string" && base64Image.trim() !== "";
+  // 각 음식 설명의 접기/펼치기 상태를 관리하는 useState 훅 사용.
+  const [expanded, setExpanded] = useState({});
+
+  const toggleDescription = (id) => {
+    setExpanded((prevExpanded) => ({
+      ...prevExpanded,
+      [id]: !prevExpanded[id],
+    }));
+  };
 
   return (
-    <Box>
-      {renderImage && (
-        <div>
-          <Image src={base64Image} alt={foodname} />
-        </div>
-      )}
-      <Container>
-        <Name>{foodname}</Name>
-        <Description>{foodprofile}</Description>
-      </Container>
-      {id && (
-        <Link to={`/main/picture/restructure/detail/${id}`}>
-          <Icon />
+    <Box key={id}>
+      <ImageWrapper>
+        <Image src={base64Image ? base64Image[0].getUrl() : 'http://via.placeholder.com/200'} alt={foodname} />
+      </ImageWrapper>
+      <NameWrapper>
+        <Link to={`/main/picture/restructure/detail/${id}`}
+          style={{ textDecorationColor: "#c35050" }}
+        >
+          <Name>{foodname}</Name>
         </Link>
-      )}
+      </NameWrapper>
+      {/* CollapsibleDescription을 사용하여 설명을 감싸고, 접기/펼치기 버튼을 추가합니다. */}
+      <CollapsibleDescription isOpen={expanded[id]}>
+        <Description onClick={() => toggleDescription(id)}>{foodprofile}</Description>
+      </CollapsibleDescription>
+      {/* 접기/펼치기 버튼을 클릭할 때 해당 음식 설명의 상태를 변경합니다. */}
+
+      <ToggleButton onClick={() => toggleDescription(id)}>
+        {expanded[id] ?
+          <Icon><MinusIcon /></Icon> :
+          <Icon><PlusIcon /></Icon>
+        }
+      </ToggleButton>
     </Box>
   );
 };
-  
+
+
 export default RestructureItem;

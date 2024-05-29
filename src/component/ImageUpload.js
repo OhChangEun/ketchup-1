@@ -79,7 +79,7 @@ const ImageUpload = ({ id }) => {
       // responseType: "arraybuffer", // JavaScript에서 바이너리 데이터를 다루기 위한 형식, 메모리에서 고정 길이의 바이너리 데이터를 나타냄
       const foodNamesList = response.data; // 서버로부터 받은 음식 이름 리스트
       
-      console.log(foodNamesList);
+      // console.log(foodNamesList);
       //const blob = new Blob([response.data]);
       //setImageUrl(URL.createObjectURL(blob));
 
