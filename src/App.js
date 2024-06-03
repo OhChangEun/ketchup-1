@@ -10,7 +10,6 @@ import KakaoMap from "./pages/KakaoMap";
 import { auth } from "./firebase";
 import BottomNav from "./component/Common/BottomNav";
 import GoogleMap from "./pages/GoogleMap";
-import TestTTS from "./pages/TestTTS";
 import ResInfo from "./component/ResInfo";
 import { MenuList } from "@mui/material";
 import PhotoField from "./component/PhotoField";
@@ -58,7 +57,6 @@ function App() {
                 path="/main/picture/restructure"
                 element={<MenuRestructure />}
               />
-            <Route path="/TTS" element={<TestTTS />} />
           </Routes>
           <ResInfo />
           <BottomNav />

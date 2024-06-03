@@ -1,8 +1,8 @@
-//메뉴판 재구성 아이템
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useState } from "react";
 import { MdAdd, MdRemove } from "react-icons/md";
+import { getSpeech } from "./TTS";
 
 const Box = styled.div`
   background-color: #fff;
@@ -13,7 +13,7 @@ const Box = styled.div`
   padding: 20px;
   max-width: 300px;
   transition: transform 0.2s;
-  
+  width: 300px; /* 고정 너비 설정 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -41,28 +41,30 @@ const Image = styled.img`
 const NameWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center; /* 수평 중앙 정렬을 위해 추가 */
-  text-align: center; /* 텍스트를 가운데 정렬하기 위해 추가 */
+  justify-content: center; /* 수평 중앙 정렬 */
+  text-align: center; /* 텍스트를 가운데 정렬 */
+  margin: 20px; /* 마진 추가 */
 `;
 
-const Name = styled.h2`
+const Name = styled(Link)`
   font-size: 1.5rem;
-  color: #333;
-  justify-content: center; /* 수평 중앙 정렬을 위해 추가 */
+  color: #c35050; /* 색상 설정 */
+  font-weight: bold; /* 글자 굵게 설정 */
+  text-align: center; /* 텍스트를 가운데 정렬 */
+  flex: 1; /* 남은 공간을 차지하여 중앙 정렬 */
+  margin-right: 10px; /* 이름과 아이콘 사이의 간격 조정 */
 `;
 
-const CollapsibleDescription = styled.div`
-  max-height: ${({ isOpen }) => (isOpen ? '1000px' : '100px')};
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
-
+const SoundImage = styled.img`
+  width: 30px;
+  cursor: pointer;
 `;
 
 const Description = styled.p`
   font-size: 1rem;
   color: #6d6b6b;
-  margin: 0; /* 위아래 마진 제거 */
-  line-height: 1.5; /* 수직 중앙 정렬을 위한 라인 높이 조정 */
+  margin: 0;
+  line-height: 1.5;
 `;
 
 const ToggleButton = styled.button`
@@ -79,13 +81,37 @@ const Icon = styled.span`
   margin-right: 5px;
   font-size: 2rem;
   color: #c35050; // 아이콘의 색상
-
 `;
 
-const MinusIcon = styled(MdRemove)``;
 const PlusIcon = styled(MdAdd)``;
+const MinusIcon = styled(MdRemove)``;
+
+const AccordionContent = styled.div`
+  max-height: ${({ isOpen }) => (isOpen ? "500px" : "0")};
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  p {
+    font-size: 1.0rem; /* 글자 크기 더 작게 설정 */
+    color: #6d6b6b;
+    margin: 0;
+    line-height: 1.5;
+  }
+`;
 
 const RestructureItem = ({ food }) => {
+  const [soundImageSrc, setSoundImageSrc] = useState("https://img.icons8.com/?size=100&id=2795&format=png&color=000000");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleSoundImageClick = async () => {
+    setSoundImageSrc("https://img.icons8.com/?size=100&id=9982&format=png&color=000000"); // 음향 이미지
+    try {
+      await getSpeech(foodname);
+    }
+    finally {
+      setSoundImageSrc("https://img.icons8.com/?size=100&id=2795&format=png&color=000000");
+    }
+  };
+
   const {
     id = 1,
     base64Image = "",
@@ -104,45 +130,47 @@ const RestructureItem = ({ food }) => {
     foodsugars = 0
   } = food || {};
 
-  console.log(food);
-
-  // 각 음식 설명의 접기/펼치기 상태를 관리하는 useState 훅 사용.
-  const [expanded, setExpanded] = useState({});
-
-  const toggleDescription = (id) => {
-    setExpanded((prevExpanded) => ({
-      ...prevExpanded,
-      [id]: !prevExpanded[id],
-    }));
-  };
-
   return (
     <Box key={id}>
+      {/* 음식 이미지 */}
       <ImageWrapper>
         <Image src={base64Image ? base64Image[0].getUrl() : 'http://via.placeholder.com/200'} alt={foodname} />
       </ImageWrapper>
-      <NameWrapper>
-        <Link to={`/main/picture/restructure/detail/${id}`}
-          style={{ textDecorationColor: "#c35050" }}
-        >
-          <Name>{foodname}</Name>
-        </Link>
-      </NameWrapper>
-      {/* CollapsibleDescription을 사용하여 설명을 감싸고, 접기/펼치기 버튼을 추가합니다. */}
-      <CollapsibleDescription isOpen={expanded[id]}>
-        <Description onClick={() => toggleDescription(id)}>{foodprofile}</Description>
-      </CollapsibleDescription>
-      {/* 접기/펼치기 버튼을 클릭할 때 해당 음식 설명의 상태를 변경합니다. */}
 
-      <ToggleButton onClick={() => toggleDescription(id)}>
-        {expanded[id] ?
-          <Icon><MinusIcon /></Icon> :
-          <Icon><PlusIcon /></Icon>
-        }
+      {/* 음식 이름과 소리 이미지 */}
+      <NameWrapper>
+        <Name to={`/main/picture/restructure/detail/${id}`}>
+          {foodname}
+        </Name>
+        <SoundImage src={soundImageSrc} onClick={handleSoundImageClick} />
+      </NameWrapper>
+
+      {/* 음식 설명 */}
+      {!isOpen && <Description>{foodprofile}</Description>}
+
+      {/* 아코디언 콘텐츠 */}
+      {isOpen && (
+        <AccordionContent isOpen={isOpen}>
+          <p>calorie: {foodcalorie} kcal</p>
+          <p>protein: {foodprotein} g</p>
+          <p>fat: {foodfat} g</p>
+          <p>carbohydrate: {foodcarbohydrate} g</p>
+          <p>sugars: {foodsugars} g</p>
+          <p>calcium: {foodcalcium} mg</p>
+          <p>iron: {foodiron} mg</p>
+          <p>potassium: {foodpotassium} mg</p>
+          <p>salt: {foodsalt} g</p>
+        </AccordionContent>
+      )}
+
+      {/* + 버튼 */}
+      <ToggleButton onClick={() => setIsOpen(!isOpen)}>
+        <Icon>{isOpen ? <MinusIcon /> : <PlusIcon />}</Icon>
       </ToggleButton>
+
+
     </Box>
   );
 };
-
 
 export default RestructureItem;
