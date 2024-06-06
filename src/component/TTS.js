@@ -28,7 +28,7 @@ export const getSpeech = (text) => {
       utterThis.rate = rate;
       // voice list가 비어있으면 오류를 reject
       if (voices.length === 0) {
-        alert("Voice list is empty");
+        //alert("Voice list is empty");
         return;
       }
       /* 
@@ -43,7 +43,7 @@ export const getSpeech = (text) => {
       if (voice) {
         utterThis.voice = voice;
       } else {
-        alert("Voice list is empty");
+        //alert("Voice list is empty");
         return;
       }
 
